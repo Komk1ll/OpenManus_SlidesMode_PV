@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>История Google</title>
+    <style>
+        @page {
+            margin: 2cm;
+            size: A4 landscape;
+            @bottom-center {
+                content: counter(page);
+                font-family: 'Arial', sans-serif;
+                font-size: 12px;
+                color: #666;
+            }
+        }
+        
+        body { 
+            font-family: 'Arial', 'Helvetica', sans-serif; 
+            margin: 0; 
+            padding: 0;
+            line-height: 1.6; 
+            color: #333;
+            background: #f8f9fa;
+        }
+        
+        .title-page {
+            text-align: center;
+            margin-bottom: 50px;
+            page-break-after: always;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .title-page h1 {
+            font-size: 3.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .title-page p {
+            font-size: 1.5em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .slide { 
+            margin-bottom: 40px; 
+            page-break-after: always;
+            min-height: 500px;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .slide h2 { 
+            color: #2c3e50; 
+            border-bottom: 4px solid #3498db; 
+            padding-bottom: 15px;
+            font-size: 2.2em;
+            margin-bottom: 25px;
+            font-weight: 700;
+        }
+        
+        .slide h3 { 
+            color: #34495e;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        
+        .slide img { 
+            max-width: 100%; 
+            height: auto; 
+            margin: 25px 0;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border: 3px solid #ecf0f1;
+        }
+        
+        .notes { 
+            font-style: italic; 
+            color: #7f8c8d; 
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid #3498db;
+            border-radius: 8px;
+            font-size: 0.95em;
+        }
+        
+        ul { 
+            margin: 20px 0;
+            padding-left: 0;
+        }
+        
+        li { 
+            margin: 12px 0;
+            line-height: 1.7;
+            list-style: none;
+            position: relative;
+            padding-left: 30px;
+        }
+        
+        li:before {
+            content: "▶";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        pre { 
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); 
+            color: #ecf0f1;
+            padding: 25px; 
+            border-radius: 12px; 
+            overflow-x: auto;
+            font-family: 'Courier New', 'Monaco', monospace;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            border: 1px solid #34495e;
+        }
+        
+        blockquote {
+            border-left: 5px solid #e74c3c;
+            margin: 25px 0;
+            padding: 20px 30px;
+            background: linear-gradient(135deg, #fdf2f2 0%, #fce4ec 100%);
+            font-style: italic;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.1);
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        
+        .content-item {
+            margin-bottom: 20px;
+        }
+        
+        .slide-number {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: #3498db;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+        
+        .text-content {
+            padding-right: 20px;
+        }
+        
+        .image-content {
+            text-align: center;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-page">
+        <h1>История Google</h1>
+        <p>Путь от стартапа до технологического гиганта</p>
+        <div style="margin-top: 50px; font-size: 1.2em; opacity: 0.8;">
+            Создано с помощью OpenManus SlidesMode v2.0
+        </div>
+    </div>
+    <div class="slide">
+        <div class="slide-number">Слайд 1</div>
+        <h2>История Google</h2>
+        <h3>От исследовательского проекта до мирового феномена</h3>
+        <div class="content-grid">
+            <div class="text-content">
+                <div class="content-item">
+                    <p>Компания Google была основана в 1998 году двумя студентами Стэнфордского университета и превратилась в одну из самых влиятельных технологических компаний мира.</p>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Титульный слайд с основной информацией о презентации</div>
+    </div>
+    <div class="slide">
+        <div class="slide-number">Слайд 2</div>
+        <h2>Истоки</h2>
+        <h3>1996-1998: Рождение идеи</h3>
+        <div class="content-grid">
+            <div class="text-content">
+                <div class="content-item">
+                    <p>В 1996 году Ларри Пейдж и Сергей Брин начали работу над поисковой системой BackRub в Стэнфордском университете.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>1996: Начало проекта BackRub</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>1997: Регистрация домена google.com</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>1998: Официальное основание компании</li></ul>
+                </div>
+                <div class="content-item">
+                    <blockquote>Наша миссия - организовать мировую информацию и сделать её универсально доступной и полезной<div class="quote-author">— Миссия Google</div></blockquote>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Рассказ о начале компании и её основателях</div>
+    </div>
+    <div class="slide">
+        <div class="slide-number">Слайд 3</div>
+        <h2>Рост и развитие</h2>
+        <h3>1999-2010: Становление гиганта</h3>
+        <div class="content-grid">
+            <div class="text-content">
+                <div class="content-item">
+                    <p>В период с 1999 по 2010 год Google превратился из небольшого стартапа в технологического гиганта.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>2000: Запуск AdWords - рекламной платформы</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2004: IPO и выход на биржу</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2006: Приобретение YouTube за $1.65 млрд</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2008: Запуск браузера Chrome</li></ul>
+                </div>
+                <div class="content-item">
+                    <pre><code class="javascript">// Пример поискового запроса
+function googleSearch(query) {
+    return fetch(`https://google.com/search?q=${query}`);
+}</code></pre>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Ключевые моменты роста компании</div>
+    </div>
+    <div class="slide">
+        <div class="slide-number">Слайд 4</div>
+        <h2>Современная эпоха</h2>
+        <h3>2011-настоящее время: Alphabet и инновации</h3>
+        <div class="content-grid">
+            <div class="text-content">
+                <div class="content-item">
+                    <p>С 2011 года Google продолжает инновации в области искусственного интеллекта, облачных технологий и мобильных платформ.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>2011: Запуск Google+</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2015: Реорганизация в Alphabet Inc.</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2016: Запуск Google Assistant</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>2023: Интеграция AI в поисковую систему</li></ul>
+                </div>
+                <div class="content-item">
+                    <blockquote>Искусственный интеллект - это одна из самых важных вещей, над которыми работает человечество<div class="quote-author">— Сундар Пичаи, CEO Google</div></blockquote>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Современные достижения и направления развития</div>
+    </div>
+    <div class="slide">
+        <div class="slide-number">Слайд 5</div>
+        <h2>Заключение</h2>
+        <h3>Влияние на мир</h3>
+        <div class="content-grid">
+            <div class="text-content">
+                <div class="content-item">
+                    <p>Google изменил способ поиска, обработки и использования информации, став неотъемлемой частью цифровой жизни миллиардов людей.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Более 8.5 миллиардов поисковых запросов в день</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Присутствие в более чем 190 странах</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Инвестиции в будущие технологии: AI, квантовые вычисления</li></ul>
+                </div>
+                <div class="content-item">
+                    <blockquote>Google не просто компания - это новый способ мышления об информации<div class="quote-author">— Технологический аналитик</div></blockquote>
+                </div>
+            </div>
+            <div class="image-content">
+                <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Подведение итогов и влияние на современный мир</div>
+    </div>
+</body>
+</html>

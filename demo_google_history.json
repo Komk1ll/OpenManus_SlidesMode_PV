@@ -1,0 +1,149 @@
+{
+  "title": "История Google",
+  "description": "Путь от стартапа до технологического гиганта",
+  "slides": [
+    {
+      "title": "История Google",
+      "subtitle": "От исследовательского проекта до мирового феномена",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Компания Google была основана в 1998 году двумя студентами Стэнфордского университета и превратилась в одну из самых влиятельных технологических компаний мира."
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1573804633927-bfcbcd909acd?w=800&h=600&fit=crop",
+      "notes": "Титульный слайд с основной информацией о презентации"
+    },
+    {
+      "title": "Истоки",
+      "subtitle": "1996-1998: Рождение идеи",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "В 1996 году Ларри Пейдж и Сергей Брин начали работу над поисковой системой BackRub в Стэнфордском университете."
+        },
+        {
+          "type": "bullet_point",
+          "text": "1996: Начало проекта BackRub"
+        },
+        {
+          "type": "bullet_point",
+          "text": "1997: Регистрация домена google.com"
+        },
+        {
+          "type": "bullet_point",
+          "text": "1998: Официальное основание компании"
+        },
+        {
+          "type": "quote",
+          "text": "Наша миссия - организовать мировую информацию и сделать её универсально доступной и полезной",
+          "author": "Миссия Google"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop",
+      "notes": "Рассказ о начале компании и её основателях"
+    },
+    {
+      "title": "Рост и развитие",
+      "subtitle": "1999-2010: Становление гиганта",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "В период с 1999 по 2010 год Google превратился из небольшого стартапа в технологического гиганта."
+        },
+        {
+          "type": "bullet_point",
+          "text": "2000: Запуск AdWords - рекламной платформы"
+        },
+        {
+          "type": "bullet_point",
+          "text": "2004: IPO и выход на биржу"
+        },
+        {
+          "type": "bullet_point",
+          "text": "2006: Приобретение YouTube за $1.65 млрд"
+        },
+        {
+          "type": "bullet_point",
+          "text": "2008: Запуск браузера Chrome"
+        },
+        {
+          "type": "code",
+          "language": "javascript",
+          "text": "// Пример поискового запроса\nfunction googleSearch(query) {\n    return fetch(`https://google.com/search?q=${query}`);\n}"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop",
+      "notes": "Ключевые моменты роста компании"
+    },
+    {
+      "title": "Современная эпоха",
+      "subtitle": "2011-настоящее время: Alphabet и инновации",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "С 2011 года Google продолжает инновации в области искусственного интеллекта, облачных технологий и мобильных платформ."
+        },
+        {
+          "type": "bullet_point",
+          "text": "2011: Запуск Google+"
+        },
+        {
+          "type": "bullet_point",
+          "text": "2015: Реорганизация в Alphabet Inc."
+        },
+        {
+          "type": "bullet_point",
+          "text": "2016: Запуск Google Assistant"
+        },
+        {
+          "type": "bullet_point",
+          "text": "2023: Интеграция AI в поисковую систему"
+        },
+        {
+          "type": "quote",
+          "text": "Искусственный интеллект - это одна из самых важных вещей, над которыми работает человечество",
+          "author": "Сундар Пичаи, CEO Google"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=800&h=600&fit=crop",
+      "notes": "Современные достижения и направления развития"
+    },
+    {
+      "title": "Заключение",
+      "subtitle": "Влияние на мир",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Google изменил способ поиска, обработки и использования информации, став неотъемлемой частью цифровой жизни миллиардов людей."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Более 8.5 миллиардов поисковых запросов в день"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Присутствие в более чем 190 странах"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Инвестиции в будущие технологии: AI, квантовые вычисления"
+        },
+        {
+          "type": "quote",
+          "text": "Google не просто компания - это новый способ мышления об информации",
+          "author": "Технологический аналитик"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",
+      "notes": "Подведение итогов и влияние на современный мир"
+    }
+  ],
+  "metadata": {
+    "created_by": "OpenManus SlidesMode v2.0",
+    "topic": "История Google",
+    "slide_count": 5,
+    "language": "russian",
+    "includes_images": true
+  }
+}
