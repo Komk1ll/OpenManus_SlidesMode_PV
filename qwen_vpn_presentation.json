@@ -1,0 +1,284 @@
+{
+  "title": "Запуск собственного VPN-сервера",
+  "subtitle": "Устойчивого к блокировкам РКН",
+  "description": "Практическое руководство по настройке VPN с протоколом Xray + VLESS-Reality",
+  "slides": [
+    {
+      "title": "Запуск собственного VPN-сервера",
+      "subtitle": "Устойчивого к блокировкам РКН",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Протокол Xray + VLESS-Reality — одно из самых 'неубиваемых' решений для обхода DPI-фильтров. Поддержка до 10 устройств одновременно с упором на скорость и конфиденциальность."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Минимальные требования: 1 vCPU, 1-2 ГБ RAM, 20 ГБ SSD/NVMe"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Возможность настройки для игр и звонков через WireGuard UDP"
+        },
+        {
+          "type": "quote",
+          "text": "VLESS-Reality маскирует трафик под обычные HTTPS-соединения, делая его практически неотличимым от легитимного трафика",
+          "author": "Документация Xray"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop",
+      "notes": "Подчеркнуть важность выбора правильного протокола для обхода блокировок"
+    },
+    {
+      "title": "Выбор VPS-провайдера и тарифа",
+      "subtitle": "Критерии для стабильной работы",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Сервер обязательно за пределами РФ — РКН может заблокировать российский IP целиком. Для 10 устройств достаточно: 1 vCPU, 1-2 ГБ RAM, 20 ГБ SSD/NVMe."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Порт не менее 1 Гбит/с для комфортной работы"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Возможность оплаты криптовалютой для максимальной анонимности"
+        },
+        {
+          "type": "paragraph",
+          "text": "Рекомендуемые провайдеры:"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Hetzner (Европа, высокая надежность, оплата картой) - ~€4/мес"
+        },
+        {
+          "type": "bullet_point",
+          "text": "DigitalOcean (США/Европа/Азия, оплата картой/PayPal) - $6/мес"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Vultr (Глобальное покрытие, оплата криптовалютой) - $6/мес"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop",
+      "notes": "Обратить внимание на географическое расположение серверов и методы оплаты"
+    },
+    {
+      "title": "Сравнение цен VPS-хостинга",
+      "subtitle": "Актуальные тарифы 2025",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Сравнение стоимости VPS с конфигурацией 1-2 ГБ RAM, 20 ГБ SSD/NVMe для комфортной работы VPN-сервера:"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Hetzner CX11: 1 vCPU, 2 ГБ, 20 ГБ NVMe - €4.15/мес (лучшее соотношение цена/качество)"
+        },
+        {
+          "type": "bullet_point",
+          "text": "DigitalOcean Basic: 1 vCPU, 1 ГБ, 25 ГБ SSD - $6/мес"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Vultr Regular: 1 vCPU, 1 ГБ, 25 ГБ SSD - $6/мес"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Linode Nanode: 1 vCPU, 1 ГБ, 25 ГБ SSD - $5/мес"
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "text": "# Проверка скорости сети на VPS\nwget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip\n# Должно показать скорость близкую к заявленной"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
+      "notes": "Подчеркнуть важность тестирования скорости перед настройкой VPN"
+    },
+    {
+      "title": "Установка и настройка Xray",
+      "subtitle": "Пошаговая инструкция",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Установка Xray с протоколом VLESS-Reality на Ubuntu/Debian сервер. Процесс занимает 10-15 минут."
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "text": "# Обновление системы\nsudo apt update && sudo apt upgrade -y\n\n# Установка необходимых пакетов\nsudo apt install curl wget unzip -y\n\n# Скачивание и установка Xray\nbash -c \"$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)\" @ install"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Генерация UUID для клиентов: uuidgen"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Создание приватного и публичного ключей для Reality"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Настройка конфигурационного файла /usr/local/etc/xray/config.json"
+        },
+        {
+          "type": "quote",
+          "text": "Reality протокол использует настоящие TLS-сертификаты популярных сайтов, что делает трафик неотличимым от обычного HTTPS",
+          "author": "Разработчики Xray"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&h=600&fit=crop",
+      "notes": "Показать важность правильной генерации ключей для безопасности"
+    },
+    {
+      "title": "Конфигурация VLESS-Reality",
+      "subtitle": "Настройка серверной части",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Создание конфигурационного файла для максимальной стойкости к обнаружению DPI-системами."
+        },
+        {
+          "type": "code",
+          "language": "json",
+          "text": "{\n  \"inbounds\": [{\n    \"port\": 443,\n    \"protocol\": \"vless\",\n    \"settings\": {\n      \"clients\": [{\n        \"id\": \"YOUR-UUID-HERE\",\n        \"flow\": \"xtls-rprx-vision\"\n      }],\n      \"decryption\": \"none\"\n    },\n    \"streamSettings\": {\n      \"network\": \"tcp\",\n      \"security\": \"reality\",\n      \"realitySettings\": {\n        \"dest\": \"www.microsoft.com:443\",\n        \"serverNames\": [\"www.microsoft.com\"],\n        \"privateKey\": \"YOUR-PRIVATE-KEY\",\n        \"shortIds\": [\"6ba85179e30d4fc2\"]\n      }\n    }\n  }]\n}"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Использование популярных сайтов как dest (microsoft.com, apple.com, cloudflare.com)"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Генерация уникальных shortIds для каждого сервера"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=600&fit=crop",
+      "notes": "Объяснить принцип работы Reality и важность выбора правильного dest"
+    },
+    {
+      "title": "Настройка клиентов",
+      "subtitle": "Подключение устройств",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Настройка клиентских приложений для различных платформ с оптимальными параметрами."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Android: v2rayNG - импорт конфигурации через QR-код или ссылку"
+        },
+        {
+          "type": "bullet_point",
+          "text": "iOS: Shadowrocket, Quantumult X - ручная настройка параметров"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Windows: v2rayN, Qv2ray - поддержка всех протоколов Xray"
+        },
+        {
+          "type": "bullet_point",
+          "text": "macOS: V2rayU, Qv2ray - нативные приложения с GUI"
+        },
+        {
+          "type": "code",
+          "language": "text",
+          "text": "# Пример VLESS-ссылки для импорта\nvless://uuid@server-ip:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.microsoft.com&fp=chrome&pbk=public-key&sid=short-id&type=tcp&headerType=none#MyVPN"
+        },
+        {
+          "type": "quote",
+          "text": "Правильная настройка fingerprint (fp=chrome) критически важна для имитации реального браузера",
+          "author": "Руководство по Reality"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop",
+      "notes": "Показать процесс импорта конфигурации на разных устройствах"
+    },
+    {
+      "title": "Безопасность и маскировка",
+      "subtitle": "Дополнительные меры защиты",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Комплекс мер для максимальной защиты VPN-сервера от обнаружения и блокировки."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Настройка файрвола: разрешить только необходимые порты (22, 443)"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Изменение стандартного SSH-порта с 22 на нестандартный"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Установка Fail2Ban для защиты от брутфорс-атак"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Регулярное обновление системы и Xray до последних версий"
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "text": "# Настройка базового файрвола\nsudo ufw default deny incoming\nsudo ufw default allow outgoing\nsudo ufw allow 22/tcp\nsudo ufw allow 443/tcp\nsudo ufw enable\n\n# Установка Fail2Ban\nsudo apt install fail2ban -y"
+        },
+        {
+          "type": "quote",
+          "text": "Безопасность VPN-сервера зависит не только от протокола, но и от правильной настройки всей системы",
+          "author": "Принципы информационной безопасности"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop",
+      "notes": "Подчеркнуть важность комплексного подхода к безопасности"
+    },
+    {
+      "title": "Мониторинг и оптимизация",
+      "subtitle": "Поддержание работоспособности",
+      "content": [
+        {
+          "type": "paragraph",
+          "text": "Инструменты и методы для контроля работы VPN-сервера и оптимизации производительности."
+        },
+        {
+          "type": "bullet_point",
+          "text": "Мониторинг логов Xray: journalctl -u xray -f"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Проверка использования ресурсов: htop, iotop, nethogs"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Настройка автоматических обновлений и перезапуска сервиса"
+        },
+        {
+          "type": "bullet_point",
+          "text": "Резервное копирование конфигурации на случай сбоев"
+        },
+        {
+          "type": "code",
+          "language": "bash",
+          "text": "# Скрипт для мониторинга и автоперезапуска\n#!/bin/bash\nif ! systemctl is-active --quiet xray; then\n    echo \"$(date): Xray не работает, перезапускаем\" >> /var/log/xray-monitor.log\n    systemctl restart xray\nfi\n\n# Добавить в crontab: */5 * * * * /path/to/monitor.sh"
+        },
+        {
+          "type": "quote",
+          "text": "Проактивный мониторинг позволяет выявить проблемы до того, как они повлияют на пользователей",
+          "author": "DevOps практики"
+        }
+      ],
+      "image_url": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
+      "notes": "Показать важность регулярного мониторинга для стабильной работы"
+    }
+  ],
+  "metadata": {
+    "created_by": "OpenManus SlidesMode v2.0 + Qwen",
+    "model": "qwen/qwen3-235b-a22b-thinking-2507",
+    "topic": "VPN-сервер устойчивый к блокировкам РКН",
+    "slide_count": 8,
+    "language": "russian",
+    "created_at": "2025-07-29T01:26:51.270923",
+    "includes_images": true,
+    "includes_code": true
+  }
+}

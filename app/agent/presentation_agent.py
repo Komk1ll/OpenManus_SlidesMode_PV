@@ -15,7 +15,7 @@ from app.tool.presentation_tools import (
     SearchImageTool,
     ExportPresentationTool
 )
-from app.tool.base import ToolResult
+from app.core.base_tool import ToolResult
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

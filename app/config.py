@@ -17,17 +17,17 @@ WORKSPACE_ROOT = PROJECT_ROOT / "workspace"
 
 
 class LLMSettings(BaseModel):
-    model: Optional[str] = Field(None, description="Model name")
-    base_url: Optional[str] = Field(None, description="API base URL")
-    api_key: Optional[str] = Field(None, description="API key")
+    model: str = Field(..., description="Model name")
+    base_url: str = Field(..., description="API base URL")
+    api_key: str = Field(..., description="API key")
     max_tokens: int = Field(4096, description="Maximum number of tokens per request")
     max_input_tokens: Optional[int] = Field(
         None,
         description="Maximum input tokens to use across all requests (None for unlimited)",
     )
     temperature: float = Field(1.0, description="Sampling temperature")
-    api_type: Optional[str] = Field(None, description="Azure, Openai, or Ollama")
-    api_version: Optional[str] = Field(None, description="Azure Openai version if AzureOpenai")
+    api_type: str = Field(..., description="Azure, Openai, or Ollama")
+    api_version: str = Field(..., description="Azure Openai version if AzureOpenai")
 
 
 class ProxySettings(BaseModel):
@@ -69,8 +69,7 @@ class RunflowSettings(BaseModel):
 class PresentationSettings(BaseModel):
     """Configuration for presentation generation"""
     
-    tavily_api_key: Optional[str] = Field(None, description="Tavily API key for image search")
-    unsplash_access_key: Optional[str] = Field(None, description="Unsplash API key for professional images")
+    tavily_api_key: str = Field(..., description="Tavily API key for image search")
     default_slide_count: int = Field(10, description="Default number of slides to generate")
     image_search_enabled: bool = Field(True, description="Enable image search for slides")
     export_formats: List[str] = Field(
@@ -231,15 +230,10 @@ class Config:
             k: v for k, v in raw_config.get("llm", {}).items() if isinstance(v, dict)
         }
 
-        # Override with environment variables if available
-        import os
-        api_key = os.getenv("OPENAI_API_KEY", base_llm.get("api_key"))
-        base_url = os.getenv("OPENAI_BASE_URL", base_llm.get("base_url"))
-        
         default_settings = {
             "model": base_llm.get("model"),
-            "base_url": base_url,
-            "api_key": api_key,
+            "base_url": base_llm.get("base_url"),
+            "api_key": base_llm.get("api_key"),
             "max_tokens": base_llm.get("max_tokens", 4096),
             "max_input_tokens": base_llm.get("max_input_tokens"),
             "temperature": base_llm.get("temperature", 1.0),
@@ -305,13 +299,10 @@ class Config:
         else:
             run_flow_settings = RunflowSettings()
 
-        presentation_config = raw_config.get("presentation", {})
-        # Override with environment variables if available
-        import os
-        presentation_config["tavily_api_key"] = os.getenv("TAVILY_API_KEY", presentation_config.get("tavily_api_key"))
-        presentation_config["unsplash_access_key"] = os.getenv("UNSPLASH_ACCESS_KEY", presentation_config.get("unsplash_access_key"))
-        
-        presentation_settings = PresentationSettings(**presentation_config)
+        presentation_config = raw_config.get("presentation")
+        presentation_settings = None
+        if presentation_config:
+            presentation_settings = PresentationSettings(**presentation_config)
         
         config_dict = {
             "llm": {

@@ -4,11 +4,12 @@ import tempfile
 from typing import AsyncGenerator
 
 import pytest
+import pytest_asyncio
 
 from app.sandbox.core.manager import SandboxManager
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="function")
 async def manager() -> AsyncGenerator[SandboxManager, None]:
     """Creates a sandbox manager instance.
 

@@ -2,7 +2,7 @@ import argparse
 import asyncio
 import os
 
-from app.agent.presentation_agent import PresentationAgent
+from app.agent.manus_presentation import ManusWithPresentation
 from app.logger import logger
 
 
@@ -17,8 +17,8 @@ async def main():
     )
     args = parser.parse_args()
 
-    # Create and initialize Presentation agent
-    agent = await PresentationAgent.create()
+    # Create and initialize Manus agent with presentation support
+    agent = await ManusWithPresentation.create()
     try:
         # Use command line prompt if provided, otherwise ask for input
         prompt = args.prompt if args.prompt else input("Enter your prompt: ")

@@ -1,4 +1,5 @@
 import pytest
+import pytest_asyncio
 
 from app.sandbox.core.sandbox import DockerSandbox, SandboxSettings
 
@@ -15,7 +16,7 @@ def sandbox_config():
     )
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module")
 async def sandbox(sandbox_config):
     """Creates and manages a test sandbox instance."""
     sandbox = DockerSandbox(sandbox_config)

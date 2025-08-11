@@ -40,7 +40,3 @@ crawl4ai~=0.6.3
 
 huggingface-hub~=0.29.2
 setuptools~=75.8.0
-
-# Dependency Injection and Architecture
-dependency-injector~=4.42.0
-structlog~=24.4.0

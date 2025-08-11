@@ -12,9 +12,9 @@ from app.llm import LLM
 class GenerateStructureTool(BaseTool):
     """Tool for generating presentation structure with language detection"""
     
-    name: str = "generate_structure"
-    description: str = "Generate a structured outline for a presentation including slide titles, descriptions, and flow"
-    parameters: dict = {
+    name = "generate_structure"
+    description = "Generate a structured outline for a presentation including slide titles, descriptions, and flow"
+    parameters = {
         "type": "object",
         "properties": {
             "topic": {
@@ -150,9 +150,9 @@ Return only the JSON structure, no additional text."""
 class GenerateSlideContentTool(BaseTool):
     """Tool for generating detailed content for individual slides with enhanced capabilities"""
     
-    name: str = "generate_slide_content"
-    description: str = "Generate detailed content for a specific slide including title, bullet points, explanations, quotes, and code examples"
-    parameters: dict = {
+    name = "generate_slide_content"
+    description = "Generate detailed content for a specific slide including title, bullet points, explanations, quotes, and code examples"
+    parameters = {
         "type": "object",
         "properties": {
             "slide_info": {
@@ -365,9 +365,9 @@ Return only the JSON structure, no additional text."""
 class SearchImageTool(BaseTool):
     """Tool for searching relevant images for slides using Unsplash and Tavily APIs"""
     
-    name: str = "search_image"
-    description: str = "Search for relevant images for presentation slides using multiple sources"
-    parameters: dict = {
+    name = "search_image"
+    description = "Search for relevant images for presentation slides using multiple sources"
+    parameters = {
         "type": "object",
         "properties": {
             "slide_title": {
@@ -579,9 +579,9 @@ class SearchImageTool(BaseTool):
 class ExportPresentationTool(BaseTool):
     """Tool for exporting presentations to various formats including PDF"""
     
-    name: str = "export_presentation"
-    description: str = "Export presentation to markdown, HTML, JSON, or PDF format"
-    parameters: dict = {
+    name = "export_presentation"
+    description = "Export presentation to markdown, HTML, JSON, or PDF format"
+    parameters = {
         "type": "object",
         "properties": {
             "presentation": {

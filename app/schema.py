@@ -101,19 +101,19 @@ class Message(BaseModel):
         cls, content: str, base64_image: Optional[str] = None
     ) -> "Message":
         """Create a user message"""
-        return cls(role="user", content=content, base64_image=base64_image)
+        return cls(role=Role.USER, content=content, base64_image=base64_image)
 
     @classmethod
     def system_message(cls, content: str) -> "Message":
         """Create a system message"""
-        return cls(role="system", content=content)
+        return cls(role=Role.SYSTEM, content=content)
 
     @classmethod
     def assistant_message(
         cls, content: Optional[str] = None, base64_image: Optional[str] = None
     ) -> "Message":
         """Create an assistant message"""
-        return cls(role="assistant", content=content, base64_image=base64_image)
+        return cls(role=Role.ASSISTANT, content=content, base64_image=base64_image)
 
     @classmethod
     def tool_message(
@@ -121,7 +121,7 @@ class Message(BaseModel):
     ) -> "Message":
         """Create a tool message"""
         return cls(
-            role="tool",
+            role=Role.TOOL,
             content=content,
             name=name,
             tool_call_id=tool_call_id,
@@ -148,7 +148,7 @@ class Message(BaseModel):
             for call in tool_calls
         ]
         return cls(
-            role="assistant",
+            role=Role.ASSISTANT,
             content=content,
             tool_calls=formatted_calls,
             base64_image=base64_image,

@@ -1,0 +1,13 @@
+2025-07-29 01:21:21,449 - INFO - 🚀 Начало эксперимента с моделью qwen/qwen3-235b-a22b-thinking-2507
+2025-07-29 01:21:21,449 - INFO - 📋 Тема презентации: Запуск собственного VPN-сервера, устойчивого к блокировкам РКН
+2025-07-29 01:21:21,449 - INFO - 📦 Импорт модулей...
+2025-07-29 01:21:21,544 - ERROR - 💥 Критическая ошибка: No module named 'browser_use'
+2025-07-29 01:21:21,544 - ERROR - Детали ошибки:
+Traceback (most recent call last):
+  File "/home/ubuntu/openmanus_project/test_qwen_model.py", line 43, in test_qwen_model
+    from app.tool.presentation_tools import (
+  File "/home/ubuntu/openmanus_project/app/tool/__init__.py", line 3, in <module>
+    from app.tool.browser_use_tool import BrowserUseTool
+  File "/home/ubuntu/openmanus_project/app/tool/browser_use_tool.py", line 6, in <module>
+    from browser_use import Browser as BrowserUseBrowser
+ModuleNotFoundError: No module named 'browser_use'

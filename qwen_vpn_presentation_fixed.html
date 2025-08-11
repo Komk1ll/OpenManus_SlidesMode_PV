@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запуск собственного VPN-сервера</title>
+    <style>
+        @page {
+            margin: 1.5cm;
+            size: A4 landscape;  /* ИСПРАВЛЕНО: Альбомная ориентация */
+            @bottom-center {
+                content: "Страница " counter(page);
+                font-family: Arial, sans-serif;
+                font-size: 10px;
+                color: #666;
+            }
+        }
+        
+        body { 
+            font-family: 'Arial', 'Helvetica', sans-serif; 
+            margin: 0; 
+            padding: 0;
+            line-height: 1.6; 
+            color: #333;
+            background: white;
+        }
+        
+        .title-page {
+            text-align: center;
+            margin-bottom: 40px;
+            page-break-after: always;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .title-page h1 {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .title-page h2 {
+            font-size: 1.6em;
+            font-weight: 400;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .title-page p {
+            font-size: 1.1em;
+            opacity: 0.8;
+            font-weight: 300;
+        }
+        
+        .slide { 
+            margin-bottom: 30px; 
+            page-break-after: always;
+            min-height: 500px;
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border: 1px solid #e1e8ed;
+            position: relative;
+        }
+        
+        .slide h2 { 
+            color: #2c3e50; 
+            border-bottom: 3px solid #3498db; 
+            padding-bottom: 12px;
+            font-size: 1.7em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .slide h3 { 
+            color: #34495e;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-weight: 600;
+            opacity: 0.8;
+        }
+        
+        .slide img { 
+            max-width: 100%; 
+            height: auto; 
+            margin: 15px 0;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border: 2px solid #ecf0f1;
+            max-height: 250px;
+            object-fit: cover;
+        }
+        
+        .notes { 
+            font-style: italic; 
+            color: #7f8c8d; 
+            margin-top: 20px;
+            padding: 12px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 4px solid #3498db;
+            border-radius: 6px;
+            font-size: 0.85em;
+        }
+        
+        ul { 
+            margin: 12px 0;
+            padding-left: 0;
+        }
+        
+        li { 
+            margin: 8px 0;
+            line-height: 1.5;
+            list-style: none;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        li:before {
+            content: "▶";
+            color: #3498db;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+        
+        pre { 
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%); 
+            color: #ecf0f1;
+            padding: 15px; 
+            border-radius: 8px; 
+            overflow-x: auto;
+            font-family: 'Courier New', 'Monaco', monospace;
+            margin: 12px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: 1px solid #34495e;
+            font-size: 0.8em;
+            line-height: 1.3;
+        }
+        
+        blockquote {
+            border-left: 4px solid #e74c3c;
+            margin: 15px 0;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #fdf2f2 0%, #fce4ec 100%);
+            font-style: italic;
+            border-radius: 6px;
+            box-shadow: 0 2px 10px rgba(231, 76, 60, 0.1);
+        }
+        
+        .quote-author {
+            text-align: right;
+            font-weight: bold;
+            color: #e74c3c;
+            margin-top: 8px;
+            font-size: 0.85em;
+        }
+        
+        .content-item {
+            margin-bottom: 12px;
+        }
+        
+        /* ИСПРАВЛЕНО: Убран .slide-number полностью */
+        
+        .metadata {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 25px;
+            font-size: 0.85em;
+            color: #666;
+            border: 1px solid #e1e8ed;
+        }
+        
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            background: #3498db;
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin: 2px;
+        }
+        
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .content-main {
+            flex: 1;
+        }
+        
+        .content-sidebar {
+            flex: 0 0 300px;
+        }
+    </style>
+</head>
+<body>
+    <div class="title-page">
+        <h1>Запуск собственного VPN-сервера</h1>
+        <h2>Устойчивого к блокировкам РКН</h2>
+        <p>Практическое руководство по настройке VPN с протоколом Xray + VLESS-Reality</p>
+        <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.7;">
+            Создано с помощью OpenManus SlidesMode v2.0 + Qwen<br>
+            29.07.2025 • ИСПРАВЛЕННАЯ ВЕРСИЯ
+        </div>
+    </div>
+    <div class="slide">
+        <h2>Запуск собственного VPN-сервера</h2>
+        <h3>Устойчивого к блокировкам РКН</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Протокол Xray + VLESS-Reality — одно из самых 'неубиваемых' решений для обхода DPI-фильтров. Поддержка до 10 устройств одновременно с упором на скорость и конфиденциальность.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Минимальные требования: 1 vCPU, 1-2 ГБ RAM, 20 ГБ SSD/NVMe</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Возможность настройки для игр и звонков через WireGuard UDP</li></ul>
+                </div>
+                <div class="content-item">
+                    <blockquote>VLESS-Reality маскирует трафик под обычные HTTPS-соединения, делая его практически неотличимым от легитимного трафика<div class="quote-author">— Документация Xray</div></blockquote>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Подчеркнуть важность выбора правильного протокола для обхода блокировок</div>
+    </div>
+    <div class="slide">
+        <h2>Выбор VPS-провайдера и тарифа</h2>
+        <h3>Критерии для стабильной работы</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Сервер обязательно за пределами РФ — РКН может заблокировать российский IP целиком. Для 10 устройств достаточно: 1 vCPU, 1-2 ГБ RAM, 20 ГБ SSD/NVMe.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Порт не менее 1 Гбит/с для комфортной работы</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Возможность оплаты криптовалютой для максимальной анонимности</li></ul>
+                </div>
+                <div class="content-item">
+                    <p>Рекомендуемые провайдеры:</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Hetzner (Европа, высокая надежность, оплата картой) - ~€4/мес</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>DigitalOcean (США/Европа/Азия, оплата картой/PayPal) - $6/мес</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Vultr (Глобальное покрытие, оплата криптовалютой) - $6/мес</li></ul>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Обратить внимание на географическое расположение серверов и методы оплаты</div>
+    </div>
+    <div class="slide">
+        <h2>Сравнение цен VPS-хостинга</h2>
+        <h3>Актуальные тарифы 2025</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Сравнение стоимости VPS с конфигурацией 1-2 ГБ RAM, 20 ГБ SSD/NVMe для комфортной работы VPN-сервера:</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Hetzner CX11: 1 vCPU, 2 ГБ, 20 ГБ NVMe - €4.15/мес (лучшее соотношение цена/качество)</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>DigitalOcean Basic: 1 vCPU, 1 ГБ, 25 ГБ SSD - $6/мес</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Vultr Regular: 1 vCPU, 1 ГБ, 25 ГБ SSD - $6/мес</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Linode Nanode: 1 vCPU, 1 ГБ, 25 ГБ SSD - $5/мес</li></ul>
+                </div>
+                <div class="content-item">
+                    <pre><code class="bash"># Проверка скорости сети на VPS
+wget -O /dev/null http://speedtest.wdc01.softlayer.com/downloads/test100.zip
+# Должно показать скорость близкую к заявленной</code></pre>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Подчеркнуть важность тестирования скорости перед настройкой VPN</div>
+    </div>
+    <div class="slide">
+        <h2>Установка и настройка Xray</h2>
+        <h3>Пошаговая инструкция</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Установка Xray с протоколом VLESS-Reality на Ubuntu/Debian сервер. Процесс занимает 10-15 минут.</p>
+                </div>
+                <div class="content-item">
+                    <pre><code class="bash"># Обновление системы
+sudo apt update && sudo apt upgrade -y
+
+# Установка необходимых пакетов
+sudo apt install curl wget unzip -y
+
+# Скачивание и установка Xray
+bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install</code></pre>
+                </div>
+                <div class="content-item">
+                    <ul><li>Генерация UUID для клиентов: uuidgen</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Создание приватного и публичного ключей для Reality</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Настройка конфигурационного файла /usr/local/etc/xray/config.json</li></ul>
+                </div>
+                <div class="content-item">
+                    <blockquote>Reality протокол использует настоящие TLS-сертификаты популярных сайтов, что делает трафик неотличимым от обычного HTTPS<div class="quote-author">— Разработчики Xray</div></blockquote>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1629654297299-c8506221ca97?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Показать важность правильной генерации ключей для безопасности</div>
+    </div>
+    <div class="slide">
+        <h2>Конфигурация VLESS-Reality</h2>
+        <h3>Настройка серверной части</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Создание конфигурационного файла для максимальной стойкости к обнаружению DPI-системами.</p>
+                </div>
+                <div class="content-item">
+                    <pre><code class="json">{
+  "inbounds": [{
+    "port": 443,
+    "protocol": "vless",
+    "settings": {
+      "clients": [{
+        "id": "YOUR-UUID-HERE",
+        "flow": "xtls-rprx-vision"
+      }],
+      "decryption": "none"
+    },
+    "streamSettings": {
+      "network": "tcp",
+      "security": "reality",
+      "realitySettings": {
+        "dest": "www.microsoft.com:443",
+        "serverNames": ["www.microsoft.com"],
+        "privateKey": "YOUR-PRIVATE-KEY",
+        "shortIds": ["6ba85179e30d4fc2"]
+      }
+    }
+  }]
+}</code></pre>
+                </div>
+                <div class="content-item">
+                    <ul><li>Использование популярных сайтов как dest (microsoft.com, apple.com, cloudflare.com)</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Генерация уникальных shortIds для каждого сервера</li></ul>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Объяснить принцип работы Reality и важность выбора правильного dest</div>
+    </div>
+    <div class="slide">
+        <h2>Настройка клиентов</h2>
+        <h3>Подключение устройств</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Настройка клиентских приложений для различных платформ с оптимальными параметрами.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Android: v2rayNG - импорт конфигурации через QR-код или ссылку</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>iOS: Shadowrocket, Quantumult X - ручная настройка параметров</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Windows: v2rayN, Qv2ray - поддержка всех протоколов Xray</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>macOS: V2rayU, Qv2ray - нативные приложения с GUI</li></ul>
+                </div>
+                <div class="content-item">
+                    <pre><code class="text"># Пример VLESS-ссылки для импорта
+vless://uuid@server-ip:443?encryption=none&flow=xtls-rprx-vision&security=reality&sni=www.microsoft.com&fp=chrome&pbk=public-key&sid=short-id&type=tcp&headerType=none#MyVPN</code></pre>
+                </div>
+                <div class="content-item">
+                    <blockquote>Правильная настройка fingerprint (fp=chrome) критически важна для имитации реального браузера<div class="quote-author">— Руководство по Reality</div></blockquote>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Показать процесс импорта конфигурации на разных устройствах</div>
+    </div>
+    <div class="slide">
+        <h2>Безопасность и маскировка</h2>
+        <h3>Дополнительные меры защиты</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Комплекс мер для максимальной защиты VPN-сервера от обнаружения и блокировки.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Настройка файрвола: разрешить только необходимые порты (22, 443)</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Изменение стандартного SSH-порта с 22 на нестандартный</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Установка Fail2Ban для защиты от брутфорс-атак</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Регулярное обновление системы и Xray до последних версий</li></ul>
+                </div>
+                <div class="content-item">
+                    <pre><code class="bash"># Настройка базового файрвола
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+sudo ufw allow 22/tcp
+sudo ufw allow 443/tcp
+sudo ufw enable
+
+# Установка Fail2Ban
+sudo apt install fail2ban -y</code></pre>
+                </div>
+                <div class="content-item">
+                    <blockquote>Безопасность VPN-сервера зависит не только от протокола, но и от правильной настройки всей системы<div class="quote-author">— Принципы информационной безопасности</div></blockquote>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Подчеркнуть важность комплексного подхода к безопасности</div>
+    </div>
+    <div class="slide">
+        <h2>Мониторинг и оптимизация</h2>
+        <h3>Поддержание работоспособности</h3>
+        <div class="content-grid">
+            <div class="content-main">
+                <div class="content-item">
+                    <p>Инструменты и методы для контроля работы VPN-сервера и оптимизации производительности.</p>
+                </div>
+                <div class="content-item">
+                    <ul><li>Мониторинг логов Xray: journalctl -u xray -f</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Проверка использования ресурсов: htop, iotop, nethogs</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Настройка автоматических обновлений и перезапуска сервиса</li></ul>
+                </div>
+                <div class="content-item">
+                    <ul><li>Резервное копирование конфигурации на случай сбоев</li></ul>
+                </div>
+                <div class="content-item">
+                    <pre><code class="bash"># Скрипт для мониторинга и автоперезапуска
+#!/bin/bash
+if ! systemctl is-active --quiet xray; then
+    echo "$(date): Xray не работает, перезапускаем" >> /var/log/xray-monitor.log
+    systemctl restart xray
+fi
+
+# Добавить в crontab: */5 * * * * /path/to/monitor.sh</code></pre>
+                </div>
+                <div class="content-item">
+                    <blockquote>Проактивный мониторинг позволяет выявить проблемы до того, как они повлияют на пользователей<div class="quote-author">— DevOps практики</div></blockquote>
+                </div>
+            </div>
+            <div class="content-sidebar">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop" alt="Slide Image">
+            </div>
+        </div>
+        <div class="notes"><strong>Заметки докладчика:</strong> Показать важность регулярного мониторинга для стабильной работы</div>
+    </div>
+    <div class="metadata">
+        <h3>Информация о презентации</h3>
+        <p><strong>Модель ИИ:</strong> qwen/qwen3-235b-a22b-thinking-2507</p>
+        <p><strong>Создано:</strong> 2025-07-29T01:39:28.693855</p>
+        <p><strong>Слайдов:</strong> 8</p>
+        <p><strong>Язык:</strong> russian</p>
+        <p><strong>Исправления:</strong> Убраны номера слайдов, PDF в альбомной ориентации</p>
+    </div>
+</body>
+</html>

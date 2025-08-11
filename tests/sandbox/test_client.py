@@ -3,12 +3,13 @@ from pathlib import Path
 from typing import AsyncGenerator
 
 import pytest
+import pytest_asyncio
 
 from app.config import SandboxSettings
 from app.sandbox.client import LocalSandboxClient, create_sandbox_client
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="function")
 async def local_client() -> AsyncGenerator[LocalSandboxClient, None]:
     """Creates a local sandbox client for testing."""
     client = create_sandbox_client()

@@ -2,6 +2,7 @@
 
 import docker
 import pytest
+import pytest_asyncio
 
 from app.sandbox.core.terminal import AsyncDockerizedTerminal
 
@@ -12,7 +13,7 @@ def docker_client():
     return docker.from_env()
 
 
-@pytest.fixture(scope="module")
+@pytest_asyncio.fixture(scope="module")
 async def docker_container(docker_client):
     """Fixture providing a test Docker container."""
     container = docker_client.containers.run(
@@ -26,7 +27,7 @@ async def docker_container(docker_client):
     container.stop()
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def terminal(docker_container):
     """Fixture providing an initialized AsyncDockerizedTerminal instance."""
     terminal = AsyncDockerizedTerminal(
@@ -92,7 +93,11 @@ class TestAsyncDockerizedTerminal:
         assert terminal.session is not None
 
 
-
+# Configure pytest-asyncio
+def pytest_configure(config):
+    """Configure pytest-asyncio."""
+    config.addinivalue_line("asyncio_mode", "strict")
+    config.addinivalue_line("asyncio_default_fixture_loop_scope", "function")
 
 
 if __name__ == "__main__":
