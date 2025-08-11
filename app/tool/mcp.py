@@ -1,10 +1,43 @@
 from contextlib import AsyncExitStack
 from typing import Dict, List, Optional
 
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.sse import sse_client
-from mcp.client.stdio import stdio_client
-from mcp.types import ListToolsResult, TextContent
+try:
+    from mcp import ClientSession, StdioServerParameters
+    from mcp.client.sse import sse_client
+    from mcp.client.stdio import stdio_client
+    from mcp.types import ListToolsResult, TextContent
+    MCP_AVAILABLE = True
+except ImportError:
+    # Create stub classes when mcp is not available
+    class ClientSession:
+        def __init__(self, *args, **kwargs):
+            pass
+        async def initialize(self):
+            pass
+        async def call_tool(self, name, kwargs):
+            return type('Result', (), {'content': []})()
+        async def list_tools(self):
+            return type('ToolsResult', (), {'tools': []})()
+    
+    class StdioServerParameters:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class ListToolsResult:
+        def __init__(self, tools=None):
+            self.tools = tools or []
+    
+    class TextContent:
+        def __init__(self, text=''):
+            self.text = text
+    
+    def sse_client(*args, **kwargs):
+        return None
+    
+    def stdio_client(*args, **kwargs):
+        return None
+    
+    MCP_AVAILABLE = False
 
 from app.logger import logger
 from app.tool.base import BaseTool, ToolResult

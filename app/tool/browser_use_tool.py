@@ -3,10 +3,36 @@ import base64
 import json
 from typing import Generic, Optional, TypeVar
 
-from browser_use import Browser as BrowserUseBrowser
-from browser_use import BrowserConfig
-from browser_use.browser.context import BrowserContext, BrowserContextConfig
-from browser_use.dom.service import DomService
+try:
+    from browser_use import Browser as BrowserUseBrowser
+    from browser_use import BrowserConfig
+    from browser_use.browser.context import BrowserContext, BrowserContextConfig
+    from browser_use.dom.service import DomService
+    BROWSER_USE_AVAILABLE = True
+except ImportError:
+    # Create stub classes when browser_use is not available
+    class BrowserUseBrowser:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class BrowserConfig:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class BrowserContext:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class BrowserContextConfig:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    class DomService:
+        def __init__(self, *args, **kwargs):
+            pass
+    
+    BROWSER_USE_AVAILABLE = False
+
 from pydantic import Field, field_validator
 from pydantic_core.core_schema import ValidationInfo
 

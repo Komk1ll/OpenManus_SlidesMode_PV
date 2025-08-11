@@ -1,0 +1,82 @@
+name: Presentation System Tests
+
+on:
+  push:
+    paths:
+      - 'app/agent/presentation_agent.py'
+      - 'app/tool/presentation_tools.py'
+      - 'tests/**/test_*presentation*.py'
+      - 'tests/**/test_*structure*.py'
+      - 'tests/**/test_*content*.py'
+      - 'tests/**/test_*image*.py'
+      - 'tests/**/test_*export*.py'
+  pull_request:
+    paths:
+      - 'app/agent/presentation_agent.py'
+      - 'app/tool/presentation_tools.py'
+      - 'tests/**/test_*presentation*.py'
+
+jobs:
+  presentation-tests:
+    name: Presentation System Tests
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.11"
+
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y wkhtmltopdf
+
+    - name: Install Python dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -e ".[test]"
+        # Install presentation-specific dependencies
+        pip install pdfkit requests openai pydantic tenacity
+
+    - name: Run presentation system tests
+      run: |
+        # Run only presentation-related tests
+        pytest tests/ -k "presentation or structure or content or image or export" \
+          --cov=app.agent.presentation_agent \
+          --cov=app.tool.presentation_tools \
+          --cov-report=html:htmlcov-presentation \
+          --cov-report=xml:coverage-presentation.xml \
+          --cov-report=term-missing \
+          --verbose
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'test-key-for-ci' }}
+        TAVILY_API_KEY: ${{ secrets.TAVILY_API_KEY || 'test-key-for-ci' }}
+        UNSPLASH_ACCESS_KEY: ${{ secrets.UNSPLASH_ACCESS_KEY || 'test-key-for-ci' }}
+
+    - name: Upload presentation coverage report
+      uses: actions/upload-artifact@v3
+      with:
+        name: presentation-coverage-report
+        path: |
+          htmlcov-presentation/
+          coverage-presentation.xml
+
+    - name: Comment coverage on PR
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          if (fs.existsSync('coverage-presentation.xml')) {
+            // Parse coverage report and comment on PR
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '📊 Presentation system coverage report generated. Check the artifacts for detailed coverage information.'
+            });
+          }

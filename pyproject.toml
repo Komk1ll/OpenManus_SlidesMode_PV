@@ -1,0 +1,286 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "spark-by-manus"
+version = "2.0.0"
+description = "Modern AI agent system with multi-modal capabilities"
+readme = "README.md"
+license = {file = "LICENSE"}
+authors = [
+    {name = "Spark_by_Manus Team"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "pydantic~=2.10.6",
+    "openai~=1.66.3",
+    "tenacity~=9.0.0",
+    "pyyaml~=6.0.2",
+    "loguru~=0.7.3",
+    "numpy",
+    "datasets~=3.4.1",
+    "fastapi~=0.115.11",
+    "tiktoken~=0.9.0",
+    "html2text~=2024.2.26",
+    "gymnasium~=1.1.1",
+    "pillow~=11.1.0",
+    "browsergym~=0.13.3",
+    "uvicorn~=0.34.0",
+    "unidiff~=0.7.5",
+    "browser-use~=0.1.40",
+    "googlesearch-python~=1.3.0",
+    "baidusearch~=1.0.3",
+    "duckduckgo_search~=7.5.3",
+    "aiofiles~=24.1.0",
+    "pydantic_core~=2.27.2",
+    "colorama~=0.4.6",
+    "playwright~=1.51.0",
+    "docker~=7.1.0",
+    "mcp~=1.5.0",
+    "httpx>=0.27.0",
+    "tomli>=2.0.0",
+    "boto3~=1.37.18",
+    "requests~=2.32.3",
+    "beautifulsoup4~=4.13.3",
+    "crawl4ai~=0.6.3",
+    "huggingface-hub~=0.29.2",
+    "setuptools~=75.8.0",
+    "dependency-injector~=4.48.1",
+    "structlog~=24.4.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest~=8.3.5",
+    "pytest-asyncio~=0.25.3",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.12.0",
+    "coverage[toml]>=7.3.0",
+    "mypy>=1.8.0",
+    "ruff>=0.1.9",
+    "black>=23.12.0",
+    "isort>=5.13.0",
+    "pre-commit>=3.6.0",
+    "detect-secrets>=1.4.0",
+    "types-requests",
+    "types-pyyaml",
+    "types-toml",
+]
+test = [
+    "pytest~=8.3.5",
+    "pytest-asyncio~=0.25.3",
+    "pytest-cov>=4.0.0",
+    "pytest-mock>=3.12.0",
+    "coverage[toml]>=7.3.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/your-org/spark-by-manus"
+Repository = "https://github.com/your-org/spark-by-manus"
+Issues = "https://github.com/your-org/spark-by-manus/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+exclude = ["tests*"]
+
+# Black code formatter
+[tool.black]
+line-length = 88
+target-version = ['py38', 'py39', 'py310', 'py311', 'py312']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+# isort import sorting
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+line_length = 88
+known_first_party = ["app"]
+
+# Ruff linter and formatter
+[tool.ruff]
+target-version = "py38"
+line-length = 88
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "UP",  # pyupgrade
+    "ARG", # flake8-unused-arguments
+    "SIM", # flake8-simplify
+    "S",   # flake8-bandit (security)
+    "N",   # pep8-naming
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "S101",  # use of assert
+    "S603",  # subprocess call with shell=True
+    "S607",  # starting a process with a partial executable path
+]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv",
+    "htmlcov",
+]
+per-file-ignores = {}
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+# MyPy type checking
+[tool.mypy]
+python_version = "3.8"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = false  # Too strict for our current codebase
+no_implicit_optional = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_equality = true
+show_error_codes = true
+
+[[tool.mypy.overrides]]
+module = [
+    "browsergym.*",
+    "crawl4ai.*",
+    "googlesearch.*",
+    "baidusearch.*",
+    "duckduckgo_search.*",
+    "browser_use.*",
+    "dependency_injector.*",
+    "structlog.*",
+    "loguru.*",
+    "mcp.*",
+    "datasets.*",
+    "gymnasium.*",
+    "playwright.*",
+]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+# Pytest configuration
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--tb=short",
+    "--cov=app",
+    "--cov-report=html:htmlcov",
+    "--cov-report=term-missing",
+    "--cov-report=xml",
+    "--cov-fail-under=80",
+    "--durations=10",
+    "--asyncio-mode=auto",
+]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "unit: Unit tests",
+    "integration: Integration tests", 
+    "performance: Performance tests",
+    "slow: Slow running tests",
+    "di: Dependency injection tests",
+    "production: Production readiness tests",
+]
+asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+
+# Coverage configuration
+[tool.coverage.run]
+source = ["app"]
+omit = [
+    "*/tests/*",
+    "*/test_*",
+    "*/__pycache__/*",
+    "*/migrations/*",
+    "*/venv/*",
+    "*/.venv/*",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod",
+]
+show_missing = true
+precision = 2
+
+[tool.coverage.html]
+directory = "htmlcov"

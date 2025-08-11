@@ -1,6 +1,13 @@
 from typing import List
 
-from baidusearch.baidusearch import search
+try:
+    from baidusearch.baidusearch import search
+    BAIDUSEARCH_AVAILABLE = True
+except ImportError:
+    # Create stub function when baidusearch is not available
+    def search(query: str, num_results: int = 10):
+        return []
+    BAIDUSEARCH_AVAILABLE = False
 
 from app.tool.search.base import SearchItem, WebSearchEngine
 

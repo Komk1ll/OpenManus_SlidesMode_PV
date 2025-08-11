@@ -1,8 +1,9 @@
 # Global LLM configuration
+# IMPORTANT: Set OPENAI_API_KEY environment variable instead of hardcoding the key
 [llm]
 model = "claude-3-7-sonnet-20250219"       # The LLM model to use
 base_url = "https://api.anthropic.com/v1/" # API endpoint URL
-api_key = "YOUR_API_KEY"                   # Your API key
+# api_key = "YOUR_API_KEY"                 # Set OPENAI_API_KEY environment variable
 max_tokens = 8192                          # Maximum number of tokens in the response
 temperature = 0.0                          # Controls randomness
 
@@ -35,7 +36,7 @@ temperature = 0.0                          # Controls randomness
 [llm.vision]
 model = "claude-3-7-sonnet-20250219"       # The vision model to use
 base_url = "https://api.anthropic.com/v1/" # API endpoint URL for vision model
-api_key = "YOUR_API_KEY"                   # Your API key for vision model
+# api_key = "YOUR_API_KEY"                 # Set OPENAI_API_KEY environment variable
 max_tokens = 8192                          # Maximum number of tokens in the response
 temperature = 0.0                          # Controls randomness for vision model
 
@@ -103,3 +104,12 @@ server_reference = "app.mcp.server" # default server module reference
 # Your can add additional agents into run-flow workflow to solve different-type tasks.
 [runflow]
 use_data_analysis_agent = false     # The Data Analysi Agent to solve various data analysis tasks
+
+# Presentation system configuration
+# IMPORTANT: Set TAVILY_API_KEY and UNSPLASH_ACCESS_KEY environment variables
+[presentation]
+# tavily_api_key = "YOUR_TAVILY_KEY"     # Set TAVILY_API_KEY environment variable
+# unsplash_access_key = "YOUR_UNSPLASH_KEY" # Set UNSPLASH_ACCESS_KEY environment variable
+default_slide_count = 10
+image_search_enabled = true
+export_formats = ["markdown", "html", "json", "pdf"]

@@ -44,7 +44,7 @@ class ToolResult(BaseModel):
         arbitrary_types_allowed = True
 
     def __bool__(self):
-        return any(getattr(self, field) for field in self.__fields__)
+        return any(getattr(self, field) for field in self.model_fields)
 
     def __add__(self, other: "ToolResult"):
         def combine_fields(
@@ -64,12 +64,13 @@ class ToolResult(BaseModel):
         )
 
     def __str__(self):
-        return f"Error: {self.error}" if self.error else self.output
+        if self.error:
+            return f"Error: {self.error}"
+        return str(self.output) if self.output is not None else ""
 
     def replace(self, **kwargs):
         """Returns a new ToolResult with the given fields replaced."""
-        # return self.copy(update=kwargs)
-        return type(self)(**{**self.dict(), **kwargs})
+        return type(self)(**{**self.model_dump(), **kwargs})
 
 
 class CLIResult(ToolResult):

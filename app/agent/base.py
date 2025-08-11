@@ -8,6 +8,10 @@ from app.llm import LLM
 from app.logger import logger
 from app.sandbox.client import SANDBOX_CLIENT
 from app.schema import ROLE_TYPE, AgentState, Memory, Message
+from app.interfaces.llm import ILLMProvider
+from app.interfaces.logger import ILogger
+from app.interfaces.config import IConfig
+from app.interfaces.sandbox import ISandboxClient
 
 
 class BaseAgent(BaseModel, ABC):
@@ -29,12 +33,18 @@ class BaseAgent(BaseModel, ABC):
         None, description="Prompt for determining next action"
     )
 
-    # Dependencies
+    # Dependencies (with DI support)
     llm: LLM = Field(default_factory=LLM, description="Language model instance")
     memory: Memory = Field(default_factory=Memory, description="Agent's memory store")
     state: AgentState = Field(
         default=AgentState.IDLE, description="Current agent state"
     )
+    
+    # DI-injected dependencies (optional for backward compatibility)
+    di_llm_provider: Optional[ILLMProvider] = Field(default=None, exclude=True)
+    di_logger: Optional[ILogger] = Field(default=None, exclude=True)
+    di_config: Optional[IConfig] = Field(default=None, exclude=True)
+    di_sandbox_client: Optional[ISandboxClient] = Field(default=None, exclude=True)
 
     # Execution control
     max_steps: int = Field(default=10, description="Maximum steps before termination")
@@ -46,6 +56,27 @@ class BaseAgent(BaseModel, ABC):
         arbitrary_types_allowed = True
         extra = "allow"  # Allow extra fields for flexibility in subclasses
 
+    def __init__(self, 
+                 llm_provider: Optional[ILLMProvider] = None,
+                 logger: Optional[ILogger] = None,
+                 config: Optional[IConfig] = None,
+                 sandbox_client: Optional[ISandboxClient] = None,
+                 **data):
+        """Initialize agent with optional DI dependencies.
+        
+        Args:
+            llm_provider: Optional LLM provider for dependency injection
+            logger: Optional logger for dependency injection
+            config: Optional config for dependency injection
+            sandbox_client: Optional sandbox client for dependency injection
+            **data: Other model data
+        """
+        super().__init__(**data)
+        self.di_llm_provider = llm_provider
+        self.di_logger = logger
+        self.di_config = config
+        self.di_sandbox_client = sandbox_client
+
     @model_validator(mode="after")
     def initialize_agent(self) -> "BaseAgent":
         """Initialize agent with default settings if not provided."""
@@ -54,6 +85,53 @@ class BaseAgent(BaseModel, ABC):
         if not isinstance(self.memory, Memory):
             self.memory = Memory()
         return self
+    
+    @classmethod
+    def create_with_dependencies(cls,
+                               llm_provider: ILLMProvider,
+                               logger: ILogger,
+                               config: IConfig,
+                               sandbox_client: ISandboxClient,
+                               **kwargs) -> "BaseAgent":
+        """Factory method to create agent with DI dependencies.
+        
+        Args:
+            llm_provider: LLM provider instance
+            logger: Logger instance
+            config: Config instance
+            sandbox_client: Sandbox client instance
+            **kwargs: Additional agent parameters
+            
+        Returns:
+            Configured agent instance with injected dependencies
+        """
+        return cls(
+            llm_provider=llm_provider,
+            logger=logger,
+            config=config,
+            sandbox_client=sandbox_client,
+            **kwargs
+        )
+    
+    @property
+    def injected_logger(self) -> ILogger:
+        """Get logger (injected or fallback to global)."""
+        return self.di_logger if self.di_logger is not None else logger
+    
+    @property
+    def injected_sandbox_client(self) -> ISandboxClient:
+        """Get sandbox client (injected or fallback to global)."""
+        return self.di_sandbox_client if self.di_sandbox_client is not None else SANDBOX_CLIENT
+    
+    @property
+    def injected_llm_provider(self) -> Optional[ILLMProvider]:
+        """Get LLM provider (injected only, no fallback)."""
+        return self.di_llm_provider
+    
+    @property
+    def injected_config(self) -> Optional[IConfig]:
+        """Get config (injected only, no fallback)."""
+        return self.di_config
 
     @asynccontextmanager
     async def state_context(self, new_state: AgentState):
@@ -137,7 +215,7 @@ class BaseAgent(BaseModel, ABC):
                 self.current_step < self.max_steps and self.state != AgentState.FINISHED
             ):
                 self.current_step += 1
-                logger.info(f"Executing step {self.current_step}/{self.max_steps}")
+                self.injected_logger.info(f"Executing step {self.current_step}/{self.max_steps}")
                 step_result = await self.step()
 
                 # Check for stuck state
@@ -150,7 +228,7 @@ class BaseAgent(BaseModel, ABC):
                 self.current_step = 0
                 self.state = AgentState.IDLE
                 results.append(f"Terminated: Reached max steps ({self.max_steps})")
-        await SANDBOX_CLIENT.cleanup()
+        await self.injected_sandbox_client.cleanup()
         return "\n".join(results) if results else "No steps executed"
 
     @abstractmethod
@@ -165,7 +243,7 @@ class BaseAgent(BaseModel, ABC):
         stuck_prompt = "\
         Observed duplicate responses. Consider new strategies and avoid repeating ineffective paths already attempted."
         self.next_step_prompt = f"{stuck_prompt}\n{self.next_step_prompt}"
-        logger.warning(f"Agent detected stuck state. Added prompt: {stuck_prompt}")
+        self.injected_logger.warning(f"Agent detected stuck state. Added prompt: {stuck_prompt}")
 
     def is_stuck(self) -> bool:
         """Check if the agent is stuck in a loop by detecting duplicate content"""
